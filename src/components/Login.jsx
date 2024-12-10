@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import Header from "./Header";
 
 const Login = () => {
   return (
-    <div>Login</div>
-  )
-}
+    <>
+      <div>
+        <Header />
+        <div>
+          Login
+          </div>
+      </div>
+    </>
+  );
+};
 
-export default Login
+export default Login;
