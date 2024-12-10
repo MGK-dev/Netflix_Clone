@@ -1,11 +1,11 @@
 import React from 'react'
 import './index.css';  // Ensure this is at the top of your file
-
+import Body from './components/Body';
 
 function App() {
   return (
-    <div className="text-3xl font-bold underline bg-red-800">
-      App
+    <div>
+      <Body />
       </div>
   )
 }
