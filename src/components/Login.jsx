@@ -3,9 +3,20 @@ import Header from "./Header";
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const logInHandler = () => {
     setIsLoggedIn(!isLoggedIn);
   };
+
+  const getInputData = (e) => {
+    e.preventDefault();
+    console.log(fullName, email, password);
+  }
+
+  
   return (
     <>
       <div>
@@ -20,7 +31,7 @@ const Login = () => {
 
         {/* Form Centered */}
 
-        <form
+        <form onSubmit={getInputData}
           action=""
           className="flex flex-col justify-center items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black opacity-80 p-12 rounded-md shadow-lg"
         >
@@ -30,6 +41,8 @@ const Login = () => {
           <div className=" flex flex-col p-6 rounded shadow-lg">
             {!isLoggedIn && (
               <input
+                value={fullName}
+                onChange={(e) => {setFullName(e.target.value)}}
                 type="text"
                 placeholder="Full Name"
                 id="fullName"
@@ -38,6 +51,8 @@ const Login = () => {
             )}
 
             <input
+              value={email}
+              onChange={(e) => {setEmail(e.target.value)}}
               type="email"
               placeholder="Email"
               id="email"
@@ -45,12 +60,15 @@ const Login = () => {
             />
 
             <input
+              value={password}
+              onChange={(e) => {setPassword(e.target.value)}}
               type="password"
               placeholder="Password"
               id="password"
               className="px-3 py-2 my-2 border rounded bg-gray-800 text-white focus:outline-none focus:ring focus:ring-white"
             />
-            <p className="text-white">
+            <button className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">{isLoggedIn ? "Login" : "SignUp"}</button>
+            <p className="text-white mt-2">
               {isLoggedIn ? "New to Netflix ?" : "Already have an account ?"}
               <span
                 onClick={logInHandler}
