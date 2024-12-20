@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import axios from "axios";
+import { API_END_POINT } from "../utils/constant";
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,12 +13,33 @@ const Login = () => {
     setIsLoggedIn(!isLoggedIn);
   };
 
-  const getInputData = (e) => {
+  const getInputData = async (e) => {
     e.preventDefault();
-    console.log(fullName, email, password);
-  }
+    if (isLoggedIn) {
+      //login
+      const user = {email, password};
+      try {
+        const res = await axios.post(`${API_END_POINT}/login`, user);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      //register
+      const user = { fullName, email, password };
+      try {
+        const res = await axios.post(`${API_END_POINT}/register`, user);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-  
+    setFullName("");
+    setEmail("");
+    setPassword("");
+  };
+
   return (
     <>
       <div>
@@ -31,7 +54,8 @@ const Login = () => {
 
         {/* Form Centered */}
 
-        <form onSubmit={getInputData}
+        <form
+          onSubmit={getInputData}
           action=""
           className="flex flex-col justify-center items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black opacity-80 p-12 rounded-md shadow-lg"
         >
@@ -42,7 +66,9 @@ const Login = () => {
             {!isLoggedIn && (
               <input
                 value={fullName}
-                onChange={(e) => {setFullName(e.target.value)}}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                }}
                 type="text"
                 placeholder="Full Name"
                 id="fullName"
@@ -52,7 +78,9 @@ const Login = () => {
 
             <input
               value={email}
-              onChange={(e) => {setEmail(e.target.value)}}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               type="email"
               placeholder="Email"
               id="email"
@@ -61,14 +89,18 @@ const Login = () => {
 
             <input
               value={password}
-              onChange={(e) => {setPassword(e.target.value)}}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
               type="password"
               placeholder="Password"
               id="password"
               className="px-3 py-2 my-2 border rounded bg-gray-800 text-white focus:outline-none focus:ring focus:ring-white"
             />
-            <button className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">{isLoggedIn ? "Login" : "SignUp"}</button>
-            <p className="text-white mt-2">
+            <button className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">
+              {isLoggedIn ? "Login" : "SignUp"}
+            </button>
+            <p className="text-white mt-2 text-center">
               {isLoggedIn ? "New to Netflix ?" : "Already have an account ?"}
               <span
                 onClick={logInHandler}
