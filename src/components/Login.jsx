@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import { API_END_POINT } from "../utils/constant";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const logInHandler = () => {
     setIsLoggedIn(!isLoggedIn);
@@ -15,22 +18,44 @@ const Login = () => {
 
   const getInputData = async (e) => {
     e.preventDefault();
+    // console.log(fullName, email, password);
     if (isLoggedIn) {
       //login
-      const user = {email, password};
+      const user = { email, password };
       try {
-        const res = await axios.post(`${API_END_POINT}/login`, user);
+        const res = await axios.post(`${API_END_POINT}/login`, user, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log(res);
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
+        navigate("/browse");
       } catch (error) {
+        toast.error(error.response.data.message);
         console.log(error);
       }
     } else {
       //register
       const user = { fullName, email, password };
+      console.log(user);
       try {
-        const res = await axios.post(`${API_END_POINT}/register`, user);
+        const res = await axios.post(`${API_END_POINT}/register`, user, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log(res);
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
+        setIsLoggedIn(true);
       } catch (error) {
+        toast.error(error.response.data.message);
         console.log(error);
       }
     }
