@@ -8,28 +8,26 @@ import MovieContainer from "./MovieContainer";
 import axios from "axios";
 import { Now_Playing_Movie, options } from "../utils/constant";
 import { getNowPlayingMovies } from "../redux/movieSlice";
+import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import usePopularMovies from "../hooks/usePopularMovies";
+import useTopRatedMovies from "../hooks/useTopRatedMovies";
+import useUpComingMovies from "../hooks/useUpComingMovies";
 
 const Browse = () => {
   const user = useSelector((store) => store.app.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
-  const nowPlayingMovies = async () => {
-    try {
-      const res = await axios.get(Now_Playing_Movie, options);
-      console.log(res.data.results);
-      dispatch(getNowPlayingMovies(res.data.results))
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //my custom hooks
+  useNowPlayingMovies();
+  usePopularMovies();
+  useTopRatedMovies();
+  useUpComingMovies();
 
   useEffect(() => {
     if (!user) {
       navigate("/");
     }
-    nowPlayingMovies(); 
   }, []);
   return (
     <div>
