@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isLoading = useSelector(store => store.app.isLoading);
+  const isLoading = useSelector((store) => store.app.isLoading);
 
   const logInHandler = () => {
     setIsLoggedIn(!isLoggedIn);
@@ -32,7 +32,7 @@ const Login = () => {
       try {
         const res = await axios.post(`${API_END_POINT}/login`, user, {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           withCredentials: true,
         });
@@ -40,7 +40,7 @@ const Login = () => {
         if (res.data.success) {
           toast.success(res.data.message);
         }
-        dispatch(setUser((res.data.user)));
+        dispatch(setUser(res.data.user));
         navigate("/browse");
       } catch (error) {
         toast.error(error.response.data.message);
@@ -136,8 +136,11 @@ const Login = () => {
               id="password"
               className="px-3 py-2 my-2 border rounded bg-gray-800 text-white focus:outline-none focus:ring focus:ring-white"
             />
-            <button type="submit" className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">
-              {`${isLoading ? "Loading..." : (isLoggedIn ? "Login" : "SignUp")}`}
+            <button
+              type="submit"
+              className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium"
+            >
+              {`${isLoading ? "Loading..." : isLoggedIn ? "Login" : "SignUp"}`}
             </button>
             <p className="text-white mt-2 text-center">
               {isLoggedIn ? "New to Netflix ?" : "Already have an account ?"}
