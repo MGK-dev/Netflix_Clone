@@ -4,8 +4,9 @@ import axios from "axios";
 import { API_END_POINT } from "../utils/constant";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, setUser } from "../redux/userSlice";
+import store from "../redux/store";
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +16,8 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const isLoading = useSelector(store => store.app.isLoading);
+
   const logInHandler = () => {
     setIsLoggedIn(!isLoggedIn);
   };
@@ -22,6 +25,7 @@ const Login = () => {
   const getInputData = async (e) => {
     e.preventDefault();
     // console.log(fullName, email, password);
+    dispatch(setLoading(true));
     if (isLoggedIn) {
       //login
       const user = { email, password };
@@ -41,9 +45,13 @@ const Login = () => {
       } catch (error) {
         toast.error(error.response.data.message);
         console.log(error);
+      } finally {
+        dispatch(setLoading(false));
       }
     } else {
       //register
+
+      dispatch(setLoading(true));
       const user = { fullName, email, password };
       console.log(user);
       try {
@@ -61,6 +69,8 @@ const Login = () => {
       } catch (error) {
         toast.error(error.response.data.message);
         console.log(error);
+      } finally {
+        dispatch(setLoading(false));
       }
     }
 
@@ -126,8 +136,8 @@ const Login = () => {
               id="password"
               className="px-3 py-2 my-2 border rounded bg-gray-800 text-white focus:outline-none focus:ring focus:ring-white"
             />
-            <button className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">
-              {isLoggedIn ? "Login" : "SignUp"}
+            <button type="submit" className="bg-red-600 mt-6 p-3 text-white rounded-sm font-medium">
+              {`${isLoading ? "Loading..." : (isLoggedIn ? "Login" : "SignUp")}`}
             </button>
             <p className="text-white mt-2 text-center">
               {isLoggedIn ? "New to Netflix ?" : "Already have an account ?"}
